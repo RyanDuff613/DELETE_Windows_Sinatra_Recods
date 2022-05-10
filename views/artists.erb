@@ -1,0 +1,8 @@
+<% if @artists.any? %>
+  <ul>
+  <% @artists.each do |artist| %>
+    <li><a href="/artists/<%=artist.id%>"><%= artist.name %></a></li>
+  <% end %>
+<% else %>
+  <p>No artists in database</p>
+<% end %>

@@ -1,0 +1,23 @@
+<% if @artists.any? %>
+  <h3>ARTISTS:</h3>
+  <ul>
+  <% @artists.each do |artist| %>
+    <li><a href="/artists/<%=artist.id%>"><%= artist.name %></a></li>
+  <% end %>
+  </ul>
+<% else %>
+  <p>No artists in database</p>
+<% end %>
+
+<br>
+
+<% if @albums.any? %>
+  <h3>ALBUMS:</h3>
+  <ul>
+  <% @albums.each do |album| %>
+    <li><a href="/albums/<%=album.id%>"><%= album.name %></a></li>
+  <% end %>
+  </ul>
+<% else %>
+  <p>No albums in database</p>
+<% end %>

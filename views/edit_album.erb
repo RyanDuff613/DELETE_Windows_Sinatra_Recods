@@ -6,3 +6,8 @@
     <input id="name" name="name" type="text">
     <button type="submit">Submit New Name</button>
 </form>
+
+<form action="/albums/<%=@album.id %>" method="post">
+    <input name="_method" type="hidden" value="delete">
+    <button type="submit">Delete Album</button>
+</form>
