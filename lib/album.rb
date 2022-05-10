@@ -52,4 +52,11 @@ class Album
     def songs 
         Song.find_by_album(self.id)
     end
+
+    def artist
+        result = DB.exec("SELECT * FROM albums_artists WHERE album_id = #{@id};")
+        artist_id = result.first.fetch("artist_id").to_i
+        # binding.pry
+        Artist.find(artist_id)
+    end
 end

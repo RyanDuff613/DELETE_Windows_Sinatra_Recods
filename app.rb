@@ -1,10 +1,10 @@
 require 'sinatra'
 require 'sinatra/reloader'
+require 'pry'
+require 'pg'
 require './lib/album'
 require './lib/artist'
-require 'pry'
 require './lib/song'
-require 'pg'
 require './db_access.rb'
 also_reload 'lib/**/*.rb'
 
@@ -35,10 +35,9 @@ get '/albums/:id/edit' do
 end
 
 patch '/albums/:id' do
-  album = Album.find(params[:id].to_i)
-  album.update(params[:name])
-  @albums = Album.all
-  erb(:albums)
+  @album = Album.find(params[:id].to_i)
+  @album.update(params[:name])
+  erb(:album_detail)
 end
 
 post '/albums' do
@@ -47,7 +46,7 @@ post '/albums' do
   new_album = Album.new({:name => name, :id => nil})
   new_album.save
   @albums = Album.all
-  @artists = Artists.all
+  @artists = Artist.all
   erb(:index)
 end
 

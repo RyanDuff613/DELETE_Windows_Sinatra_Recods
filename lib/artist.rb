@@ -45,8 +45,8 @@ class Artist
     elsif (attributes.has_key?(:album_name)) && (attributes.fetch(:album_name) != nil)
       album_name = attributes.fetch(:album_name)
       album = DB.exec("SELECT * FROM albums WHERE lower(name)='#{album_name.downcase}';").first
-      if album != nil
-        DB.exec("INSERT INTO albums_artists (album_id, artist_id) VALUES (#{album['id'].to_i}, #{@id});")
+      if (album != nil) && (DB.exec("SELECT FROM albums_artists WHERE album_id = #{@id}") != nil)
+          DB.exec("INSERT INTO albums_artists (album_id, artist_id) VALUES (#{album['id'].to_i}, #{@id});")
       end
     end
   end
@@ -56,15 +56,33 @@ class Artist
     DB.exec("DELETE FROM artists WHERE id = #{@id};")
   end
 
+  # def albums
+  #   albums = []
+  #   results = DB.exec("SELECT album_id FROM albums_artists WHERE artist_id = #{@id};")
+  #     results.each() do |result|
+  #       album_id = result.fetch("album_id").to_i()
+  #       album = DB.exec("SELECT * FROM albums WHERE id = #{album_id};")
+  #       name = album.first().fetch("name")
+  #       albums.push(Album.new({:name => name, :id => album_id}))
+  #     end
+  #   albums
+  # end
+
   def albums
     albums = []
-    results = DB.exec("SELECT album_id FROM albums_artists WHERE artist_id = #{@id};")
-      results.each() do |result|
-        album_id = result.fetch("album_id").to_i()
-        album = DB.exec("SELECT * FROM albums WHERE id = #{album_id};")
-        name = album.first().fetch("name")
-        albums.push(Album.new({:name => name, :id => album_id}))
-      end
+    album_ids = []
+    query1_results = DB.exec("SELECT album_id FROM albums_artists WHERE artist_id = #{@id};")
+    query1_results.each() do |result|
+      album_id = result.fetch("album_id").to_i()
+      album_ids.push(album_id)
+    end
+    album_ids_string = album_ids.join(",")
+    query2_results = DB.exec("SELECT * FROM albums WHERE id in (#{album_ids_string});")
+    query2_results.each do |result|
+      name = result.fetch("name")
+      album_id = result.fetch("id").to_i
+      albums.push(Album.new({:name => name, :id => album_id}))
+    end
     albums
   end
 

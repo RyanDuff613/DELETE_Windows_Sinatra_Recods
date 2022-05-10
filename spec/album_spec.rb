@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'Album' do
 
-
     describe '.all' do
         it 'returns an empty array when there are no albums' do
             expect(Album.all).to(eq([]))
@@ -85,6 +84,17 @@ describe 'Album' do
             song2 = Song.new({:name => "Cousin Mary", :album_id => album1.id, :id => nil})
             song2.save
             expect(album1.songs).to(eq([song, song2]))
+        end
+    end
+
+    describe '#artist' do
+        it 'returns an albums artist' do
+            album = Album.new({:name => "Definitely Maybe",:id => nil})
+            album.save
+            artist = Artist.new({:name => 'Oasis', :id => nil}) 
+            artist.save
+            artist.update({:album_name => "Definitely Maybe"})
+            expect(album.artist).to(eq(artist))
         end
     end
 end
