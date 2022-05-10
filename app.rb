@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require './lib/album'
+require './lib/artist'
 require 'pry'
 require './lib/song'
 require 'pg'
@@ -46,7 +47,8 @@ post '/albums' do
   new_album = Album.new({:name => name, :id => nil})
   new_album.save
   @albums = Album.all
-  erb(:albums)
+  @artists = Artists.all
+  erb(:index)
 end
 
 delete '/albums/:id' do
@@ -93,6 +95,8 @@ end
 
 get '/artists/:id' do
   @artist = Artist.find(params[:id])
+  # binding.pry
+  @albums = @artist.albums
   erb(:artist)
 end
 
@@ -109,8 +113,14 @@ post '/artists' do
 end
 
 patch '/artists/:id' do
+  artist = Artist.find(params[:id])
+  if (params[:artist_name] != nil)
+    artist.update({:name => params[:artist_name]})
+  elsif (params[:album_name] != nil)
+    artist.update({:album_name => params[:album_name]})
+  end
   @artist = Artist.find(params[:id])
-  @artist.update({:name => params[:artist_name]})
+  @albums = @artist.albums
   erb(:artist)
 end
 

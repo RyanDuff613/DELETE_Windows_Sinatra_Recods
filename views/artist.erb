@@ -1,5 +1,14 @@
+
 <h3>Artist Name: <%= @artist.name %></h3>
 
-
-
+<% if @albums.any? %>
+  <h4>Albums:</h4>
+  <ul>
+  <% @albums.each do |album| %>
+    <li><a href="/albums/<%=album.id%>"><%= album.name %></a></li>
+  <% end %>
+<% else %>
+  <p>No albums associated with this artist</p>
+<% end %>
+<br>
 <p><a href="/artists/<%= @artist.id%>/edit">Edit artist</a></p>

@@ -46,6 +46,7 @@ class Album
     def delete
         DB.exec("DELETE FROM albums WHERE ID = #{@id};")
         DB.exec("DELETE FROM songs WHERE album_id = #{@id};")
+        DB.exec("DELETE FROM albums_artists WHERE album_id = #{@id}")
     end
 
     def songs 
