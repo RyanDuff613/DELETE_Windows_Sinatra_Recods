@@ -77,11 +77,13 @@ class Artist
       album_ids.push(album_id)
     end
     album_ids_string = album_ids.join(",")
-    query2_results = DB.exec("SELECT * FROM albums WHERE id in (#{album_ids_string});")
-    query2_results.each do |result|
-      name = result.fetch("name")
-      album_id = result.fetch("id").to_i
-      albums.push(Album.new({:name => name, :id => album_id}))
+    if album_ids_string != ""
+      query2_results = DB.exec("SELECT * FROM albums WHERE ID in (#{album_ids_string});")
+      query2_results.each do |result|
+        name = result.fetch("name")
+        album_id = result.fetch("id").to_i
+        albums.push(Album.new({:name => name, :id => album_id}))
+      end
     end
     albums
   end

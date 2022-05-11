@@ -41,7 +41,6 @@ patch '/albums/:id' do
 end
 
 post '/albums' do
-  # binding.pry
   name = params[:album_name]
   new_album = Album.new({:name => name, :id => nil})
   new_album.save
